@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carnicería Pampa</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#111827;
+  color:#fff;
+}
+header{
+  background:#991b1b;
+  padding:20px;
+  text-align:center;
+}
+h1{margin:0;font-size:28px}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:15px;
+}
+.menu{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+button{
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  font-size:16px;
+  font-weight:bold;
+  background:#dc2626;
+  color:white;
+}
+button:active{transform:scale(.98)}
+.card{
+  background:#1f2937;
+  padding:18px;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+input,select{
+  width:100%;
+  padding:13px;
+  margin:6px 0 12px;
+  border-radius:8px;
+  border:1px solid #4b5563;
+  background:#111827;
+  color:white;
+  font-size:16px;
+}
+label{font-weight:bold}
+.resultado{
+  background:#064e3b;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
+}
+.numero{
+  font-size:25px;
+  font-weight:bold;
+}
+.item{
+  background:#374151;
+  padding:12px;
+  border-radius:10px;
+  margin:8px 0;
+}
+.rojo{color:#f87171}
+.verde{color:#34d399}
+.oculto{display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🥩 CARNICERÍA PAMPA</h1>
+<p>Control de costos y producción</p>
+</header>
+
+<div class="container">
+
+<div class="menu">
+<button onclick="mostrar('inicio')">🏠 Inicio</button>
+<button onclick="mostrar('mediares')">🥩 Media res</button>
+<button onclick="mostrar('pollo')">🍗 Pollo</button>
+<button onclick="mostrar('recetas')">🌭 Recetas</button>
+<button onclick="mostrar('ventas')">💰 Ventas</button>
+<button onclick="mostrar('balance')">📊 Balance</button>
+</div>
+
+<!-- INICIO -->
+<section id="inicio">
+<div class="card">
+<h2>Panel principal</h2>
+<p>Desde acá podés controlar tu producción y rentabilidad.</p>
+
+<div class="resultado">
+<p>Ganancia acumulada</p>
+<div class="numero" id="gananciaInicio">$0</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Funciones</h3>
+<p>🥩 Desposte de media res</p>
+<p>🍗 Desposte de cajón de pollo</p>
+<p>🌭 Cálculo de chorizos y salames</p>
+<p>🥩 Cálculo de milanesas</p>
+<p>💰 Registro de ventas</p>
+<p>📊 Balance semanal y mensual</p>
+</div>
+</section>
+
+<!-- MEDIA RES -->
+<section id="mediares" class="oculto">
+<div class="card">
+<h2>🥩 Desposte de media res</h2>
+
+<label>Peso de la media res (kg)</label>
+<input id="pesoRes" type="number" placeholder="Ej: 100">
+
+<label>Precio por kg de gancho</label>
+<input id="precioRes" type="number" placeholder="Ej: 10100">
+
+<button onclick="calcularRes()">Calcular costo</button>
+
+<div id="resultadoRes"></div>
+</div>
+
+<div class="card">
+<h3>Rendimiento de cortes</h3>
+
+<label>Asado kg</label>
+<input id="asado" type="number">
+
+<label>Vacío kg</label>
+<input id="vacio" type="number">
+
+<label>Aguja kg</label>
+<input id="aguja" type="number">
+
+<label>Bife kg</label>
+<input id="bife" type="number">
+
+<label>Cuadrada kg</label>
+<input id="cuadrada" type="number">
+
+<label>Otros cortes kg</label>
+<input id="otros" type="number">
+
+<button onclick="rendimientoRes()">Calcular rendimiento</button>
+
+<div id="resultadoRendimiento"></div>
+</div>
+</section>
+
+<!-- POLLO -->
+<section id="pollo" class="oculto">
+<div class="card">
+<h2>🍗 Desposte de cajón de pollo</h2>
+
+<label>Costo del cajón</label>
+<input id="costoPollo" type="number" placeholder="Ej: 71800">
+
+<label>Cantidad de pollos</label>
+<input id="cantidadPollo" type="number" placeholder="Ej: 6">
+
+<label>Kg de pechuga</label>
+<input id="pechuga" type="number">
+
+<label>Kg de pata y muslo</label>
+<input id="pataMuslo" type="number">
+
+<label>Kg de alas</label>
+<input id="alas" type="number">
+
+<button onclick="calcularPollo()">Calcular</button>
+
+<div id="resultadoPollo"></div>
+</div>
+</section>
+
+<!-- RECETAS -->
+<section id="recetas" class="oculto">
+
+<div class="card">
+<h2>🌭 Recetas y producción</h2>
+
+<select id="receta">
+<option value="chorizo">Chorizo</option>
+<option value="salame">Salame 70/30</option>
+<option value="milanesa">Milanesa</option>
+<option value="picada">Picada</option>
+</select>
+
+<label>Kg de carne</label>
+<input id="kgReceta" type="number" placeholder="Ej: 10">
+
+<label>Costo carne por kg</label>
+<input id="costoCarne" type="number">
+
+<label>Costo adicional por kg</label>
+<input id="adicional" type="number">
+
+<label>Precio de venta por kg</label>
+<input id="ventaReceta" type="number">
+
+<button onclick="calcularReceta()">Calcular receta</button>
+
+<div id="resultadoReceta"></div>
+</div>
+
+<div class="card">
+<h3>📋 Recetas guardadas</h3>
+<div id="listaRecetas"></div>
+</div>
+
+</section>
+
+<!-- VENTAS -->
+<section id="ventas" class="oculto">
+
+<div class="card">
+<h2>💰 Registrar venta</h2>
+
+<label>Producto</label>
+<input id="productoVenta" placeholder="Ej: Asado">
+
+<label>Kilos vendidos</label>
+<input id="kgVenta" type="number">
+
+<label>Precio por kg</label>
+<input id="precioVenta" type="number">
+
+<button onclick="guardarVenta()">Guardar venta</button>
+</div>
+
+<div class="card">
+<h3>Ventas registradas</h3>
+<div id="listaVentas"></div>
+</div>
+
+</section>
+
+<!-- BALANCE -->
+<section id="balance" class="oculto">
+
+<div class="card">
+<h2>📊 Balance</h2>
+
+<div class="resultado">
+<p>Total vendido</p>
+<div class="numero" id="totalVentas">$0</div>
+</div>
+
+<div class="resultado">
+<p>Total de costos</p>
+<div class="numero" id="totalCostos">$0</div>
+</div>
+
+<div class="resultado">
+<p>Ganancia estimada</p>
+<div class="numero" id="ganancia">$0</div>
+</div>
+</div>
+
+<div class="card">
+<h3>📅 Resumen</h3>
+<p>Los datos quedan guardados en este dispositivo.</p>
+<button onclick="borrarDatos()">⚠️ Borrar todos los datos</button>
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+function mostrar(id){
+
+document.querySelectorAll("section").forEach(
+s=>s.classList.add("oculto")
+);
+
+document.getElementById(id).classList.remove("oculto");
+
+actualizarBalance();
+}
+
+function dinero(numero){
+return "$"+Number(numero).toLocaleString("es-AR");
+}
+
+
+/* MEDIA RES */
+
+function calcularRes(){
+
+let peso=Number(document.getElementById("pesoRes").value);
+let precio=Number(document.getElementById("precioRes").value);
+
+let costo=peso*precio;
+
+document.getElementById("resultadoRes").innerHTML=`
+<div class="resultado">
+<p>Peso: <b>${peso} kg</b></p>
+<p>Costo total:</p>
+<div class="numero">${dinero(costo)}</div>
+<p>Costo por kg: <b>${dinero(precio)}</b></p>
+</div>
+`;
+
+}
+
+
+/* RENDIMIENTO */
+
+function rendimientoRes(){
+
+let peso=Number(document.getElementById("pesoRes").value)||0;
+
+let cortes=
+Number(document.getElementById("asado").value)||0;
+cortes+=Number(document.getElementById("vacio").value)||0;
+cortes+=Number(document.getElementById("aguja").value)||0;
+cortes+=Number(document.getElementById("bife").value)||0;
+cortes+=Number(document.getElementById("cuadrada").value)||0;
+cortes+=Number(document.getElementById("otros").value)||0;
+
+let rendimiento=peso>0?(cortes/peso)*100:0;
+
+document.getElementById("resultadoRendimiento").innerHTML=`
+<div class="resultado">
+<p>Kg aprovechados: <b>${cortes.toFixed(2)} kg</b></p>
+<p>Rendimiento:</p>
+<div class="numero">${rendimiento.toFixed(2)}%</div>
+<p>Merma: ${(peso-cortes).toFixed(2)} kg</p>
+</div>
+`;
+
+}
+
+
+/* POLLO */
+
+function calcularPollo(){
+
+let costo=Number(document.getElementById("costoPollo").value)||0;
+let cantidad=Number(document.getElementById("cantidadPollo").value)||0;
+
+let pechuga=Number(document.getElementById("pechuga").value)||0;
+let pata=Number(document.getElementById("pataMuslo").value)||0;
+let alas=Number(document.getElementById("alas").value)||0;
+
+let totalKg=pechuga+pata+alas;
+
+let costoKg=totalKg>0?costo/totalKg:0;
+
+document.getElementById("resultadoPollo").innerHTML=`
+<div class="resultado">
+<p>Pollos: <b>${cantidad}</b></p>
+<p>Producción aprovechable: <b>${totalKg.toFixed(2)} kg</b></p>
+<p>Costo real por kg:</p>
+<div class="numero">${dinero(costoKg)}</div>
+</div>
+`;
+
+}
+
+
+/* RECETAS */
+
+function calcularReceta(){
+
+let receta=document.getElementById("receta").value;
+let kg=Number(document.getElementById("kgReceta").value)||0;
+let costo=Number(document.getElementById("costoCarne").value)||0;
+let adicional=Number(document.getElementById("adicional").value)||0;
+let venta=Number(document.getElementById("ventaReceta").value)||0;
+
+let costoKg=costo+adicional;
+let costoTotal=costoKg*kg;
+let ventaTotal=venta*kg;
+let ganancia=ventaTotal-costoTotal;
+
+document.getElementById("resultadoReceta").innerHTML=`
+<div class="resultado">
+<p>Producto: <b>${receta}</b></p>
+<p>Costo por kg: <b>${dinero(costoKg)}</b></p>
+<p>Costo total: <b>${dinero(costoTotal)}</b></p>
+<p>Venta total: <b>${dinero(ventaTotal)}</b></p>
+<p>Ganancia:</p>
+<div class="numero">${dinero(ganancia)}</div>
+</div>
+`;
+
+let recetas=JSON.parse(localStorage.getItem("recetas")||"[]");
+
+recetas.push({
+producto:receta,
+kg:kg,
+costo:costoTotal,
+venta:ventaTotal,
+ganancia:ganancia
+});
+
+localStorage.setItem("recetas",JSON.stringify(recetas));
+
+mostrarRecetas();
+
+}
+
+
+/* GUARDAR VENTA */
+
+function guardarVenta(){
+
+let producto=document.getElementById("productoVenta").value;
+let kg=Number(document.getElementById("kgVenta").value)||0;
+let precio=Number(document.getElementById("precioVenta").value)||0;
+
+if(!producto||kg<=0||precio<=0){
+alert("Completá todos los datos");
+return;
+}
+
+let ventas=JSON.parse(localStorage.getItem("ventas")||"[]");
+
+ventas.push({
+producto:producto,
+kg:kg,
+total:kg*precio,
+fecha:new Date().toLocaleDateString("es-AR")
+});
+
+localStorage.setItem("ventas",JSON.stringify(ventas));
+
+document.getElementById("productoVenta").value="";
+document.getElementById("kgVenta").value="";
+document.getElementById("precioVenta").value="";
+
+mostrarVentas();
+actualizarBalance();
+
+alert("Venta guardada");
+
+}
+
+
+/* MOSTRAR VENTAS */
+
+function mostrarVentas(){
+
+let ventas=JSON.parse(localStorage.getItem("ventas")||"[]");
+
+let html="";
+
+ventas.forEach((v,i)=>{
+
+html+=`
+<div class="item">
+<b>${v.producto}</b><br>
+${v.kg} kg — ${dinero(v.total)}<br>
+<small>${v.fecha}</small>
+</div>
+`;
+
+});
+
+document.getElementById("listaVentas").innerHTML=
+html||"<p>No hay ventas registradas.</p>";
+
+}
+
+
+/* MOSTRAR RECETAS */
+
+function mostrarRecetas(){
+
+let recetas=JSON.parse(localStorage.getItem("recetas")||"[]");
+
+let html="";
+
+recetas.forEach(r=>{
+
+html+=`
+<div class="item">
+<b>${r.producto}</b><br>
+${r.kg} kg<br>
+Costo: ${dinero(r.costo)}<br>
+Venta: ${dinero(r.venta)}<br>
+<span class="verde">Ganancia: ${dinero(r.ganancia)}</span>
+</div>
+`;
+
+});
+
+document.getElementById("listaRecetas").innerHTML=
+html||"<p>No hay recetas registradas.</p>";
+
+}
+
+
+/* BALANCE */
+
+function actualizarBalance(){
+
+let ventas=JSON.parse(localStorage.getItem("ventas")||"[]");
+let recetas=JSON.parse(localStorage.getItem("recetas")||"[]");
+
+let totalVenta=ventas.reduce((a,b)=>a+b.total,0);
+let totalCosto=recetas.reduce((a,b)=>a+b.costo,0);
+let ganancia=totalVenta-totalCosto;
+
+document.getElementById("totalVentas").innerText=dinero(totalVenta);
+document.getElementById("totalCostos").innerText=dinero(totalCosto);
+document.getElementById("ganancia").innerText=dinero(ganancia);
+document.getElementById("gananciaInicio").innerText=dinero(ganancia);
+
+}
+
+
+/* BORRAR */
+
+function borrarDatos(){
+
+if(confirm("¿Seguro que querés borrar todos los datos?")){
+
+localStorage.removeItem("ventas");
+localStorage.removeItem("recetas");
+
+mostrarVentas();
+mostrarRecetas();
+actualizarBalance();
+
+}
+
+}
+
+
+/* INICIO */
+
+mostrarVentas();
+mostrarRecetas();
+actualizarBalance();
+
+</script>
+
+</body>
+</html>
